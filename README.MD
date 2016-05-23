@@ -2,7 +2,7 @@
 
 MailProvider allows you to quickly send mails with different mail services like Mandrill, SendGrind and Mailgun. 
 
-##Usage ##
+## Usage ##
 The MailProvider allows you to compose an email in a single format. You only have to choose the desired service.
 
 ```php
@@ -21,3 +21,9 @@ The MailProvider allows you to compose an email in a single format. You only hav
     ;
     $service->send()
 ```
+
+## Installation ##
+MailProvider uses a `composer.json` file to require it's dependencies. Run `composer install` to require those dependencies.
+
+## Example ##
+The repository is provided with an example PHP file (`example.php`) in the root of this repository. 
