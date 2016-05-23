@@ -1,0 +1,38 @@
+{
+    "name": "leoflapper/mailprovider",
+    "type": "library",
+    "description": "Contains multiple mail providers to send emails by",
+    "keywords": [
+        "email",
+        "provider",
+        "mail",
+        "mandrill",
+        "sendgrid",
+        "mailgun"
+    ],
+    "homepage": "https://www.leoflapper.nl/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leo Flapper",
+            "email": "info@leoflapper.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "mandrill/mandrill": "1.0.*",
+        "sendgrid/sendgrid": "^4.0",
+        "mailgun/mailgun-php": "~2.0",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MailProvider\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MailProvider\\": "src/"
+        }
+    }
+}
