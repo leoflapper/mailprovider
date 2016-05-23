@@ -128,7 +128,7 @@ abstract class MailProvider implements MailInterface
         }
 
         if ($this->to === null) {
-            $this->to = array();
+            $this->to = [];
         }
 
         $this->to[] = [
@@ -256,7 +256,7 @@ abstract class MailProvider implements MailInterface
         }
 
         if ($this->cc === null) {
-            $this->cc = array();
+            $this->cc = [];
         }
 
         $this->cc[] = [
@@ -312,7 +312,7 @@ abstract class MailProvider implements MailInterface
         }
 
         if ($this->bcc === null) {
-            $this->bcc = array();
+            $this->bcc = [];
         }
 
         $this->bcc[] = [
