@@ -1,7 +1,7 @@
 {
     "name": "leoflapper/mailprovider",
     "type": "library",
-    "description": "Contains multiple mail providers to send emails by",
+    "description": "Allows you to quickly send mails with different mail services like Mandrill, SendGrind and Mailgun",
     "keywords": [
         "email",
         "provider",
