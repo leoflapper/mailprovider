@@ -13,13 +13,15 @@ The MailProvider allows you to compose an email in a single format. You only hav
         ->addTo('info@myemail.nl', 'Leo Flapper')
         ->addCc('cc@myemail.nl', 'Leo Flapper')
         ->addBcc('bcc@myemail.nl', 'Leo Flapper')
-        ->setFrom('info@myhost.nl')
-        ->setFromName('Leo Flapper')
+        ->setFrom('info@myhost.nl', 'Leo Flapper')
         ->setSubject('My Subject')
+        ->setText('My text')
         ->setHtml('<p>Beautiful content</p>')
         ->addAttachment('/myattachment.txt', 'Attachment.txt')
+        ->addHeader('MyHeader', 'Value')
+        ->setReplyTo('reply@myemail.nl')
     ;
-    $service->send()
+    $service->send();
 ```
 
 ## Installation ##

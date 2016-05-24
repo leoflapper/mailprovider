@@ -54,7 +54,7 @@ class SendGrid extends MailProvider
      * Sends the email through the SendGrid API.
      * @return SendGrid response object.
      */
-    public function doSend()
+    protected function doSend()
     {
         $response = null;
 

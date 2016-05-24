@@ -28,13 +28,13 @@ class Mailgun extends MailProvider
      * The domain to send the email from.
      * @var string
      */
-    protected $domain;
+    private $domain;
 
     /**
      * Custom parameters which can be provided to Mailgun.
      * @var array
      */
-    public $customParameters = [];
+    private $customParameters = [];
 
     /**
      * Sets the client with the provided API key.
@@ -81,7 +81,7 @@ class Mailgun extends MailProvider
      * Sends the email through the Mailgun API.
      * @return \stdClass the Mailgun API response object.
      */
-    public function doSend()
+    protected function doSend()
     {
         if(!$this->getDomain()){
             throw new \Exception('Domain not provided for sending a message through Mailgun. Please set a domain by using the "setDomain($domain)" method.');

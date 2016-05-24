@@ -27,25 +27,25 @@ class Mandrill extends MailProvider
      * Custom parameters which can be provided to Mandrill.
      * @var array
      */
-    public $customParameters = [];
+    private $customParameters = [];
 
     /**
      * Enable background sending mode.
      * @var boolean
      */
-    public $aSync = false;
+    private $aSync = false;
 
     /**
      * The name of the dedicated ip pool that should be used to send the message
      * @var string
      */
-    public $ipPool;
+    private $ipPool;
 
     /**
      * When this message should be sent as a UTC timestamp in YYYY-MM-DD HH:MM:SS format.
      * @var string
      */
-    public $sendAt;
+    private $sendAt;
 
     /**
      * Sets the client with the provided API key.
@@ -60,7 +60,7 @@ class Mandrill extends MailProvider
      * Sends the email through the Mandrill API.
      * @return array of structs for each recipient containing the key "email" with the email address, and details of the message status for that recipient.
      */
-    public function doSend()
+    protected function doSend()
     {
         return $this->client->messages->send($this->getMessage(), $this->getAsync(), $this->getIpPool(), $this->getSendAt());
     }

@@ -9,13 +9,15 @@
         ->addTo('info@myemail.nl', 'Leo Flapper')
         ->addCc('cc@myemail.nl', 'Leo Flapper')
         ->addBcc('bcc@myemail.nl', 'Leo Flapper')
-        ->setFrom('info@myhost.nl')
-        ->setFromName('Leo Flapper')
+        ->setFrom('info@myhost.nl', 'Leo Flapper')
         ->setSubject('My Subject')
+        ->setText('My text')
         ->setHtml('<p>Beautiful content</p>')
         ->addAttachment('/myattachment.txt', 'Attachment.txt')
+        ->addHeader('MyHeader', 'Value')
+        ->setReplyTo('reply@myemail.nl')
     ;
 
-    echo "<pre>"; print_r($service->send()); echo "</pre>";
+    $service->send();
 
 ?>

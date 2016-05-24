@@ -19,67 +19,67 @@ abstract class MailProvider implements MailInterface
      * Contains all 'to' email addresses.
      * @var array
      */
-    public $to = [];
+    private $to = [];
 
     /**
      * The from email address.
      * @var string
      */
-    public $from;
+    private $from;
 
     /**
      * The from email address name
      * @var string
      */
-    public $fromName;
+    private $fromName;
 
     /**
      * The reply to email address
      * @var string
      */
-    public $replyTo;
+    private $replyTo;
 
     /**
      * Contains all 'cc' email addresses.
      * @var array
      */
-    public $cc = [];
+    private $cc = [];
 
     /**
      * Contains all 'bcc' email addresses.
      * @var array
      */
-    public $bcc = [];
+    private $bcc = [];
 
     /**
      * The subject of the email.
      * @var string
      */
-    public $subject;
+    private $subject;
 
     /**
      * The text of the email.
      * @var string
      */
-    public $text;
+    private $text;
 
     /**
      * The HTML of the email.
      * @var string
      */
-    public $html;
+    private $html;
 
     /**
      * The email headers.
      * @var array
      */
-    public $headers = [];
+    private $headers = [];
 
     /**
      * The email attachments.
      * @var array
      */
-    public $attachments = [];
+    private $attachments = [];
 
     /**
      * {@inheritdoc }
@@ -142,9 +142,10 @@ abstract class MailProvider implements MailInterface
     /**
      * Sets the from email address.
      * @param string $email the email address.
+     * @param string $email the name of the email address.
      * @return MailProvider
      */
-    public function setFrom($email)
+    public function setFrom($email, $name = null)
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(
@@ -155,6 +156,10 @@ abstract class MailProvider implements MailInterface
         }
 
         $this->from = $email;
+
+        if($name !== null){
+            $this->setFromName($name);
+        }
 
         return $this;
     }
