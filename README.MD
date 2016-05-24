@@ -25,7 +25,21 @@ The MailProvider allows you to compose an email in a single format. You only hav
 ```
 
 ## Installation ##
-MailProvider uses a `composer.json` file to require it's dependencies. Run `composer install` to require those dependencies.
+Add MailProvider to your `composer.json` file. If you are not using [Composer](http://getcomposer.org), you should be. It's an excellent way to manage dependencies in your PHP application. 
+
+```json
+{  
+  "require": {
+    "leoflapper/mailprovider": "dev-master"
+  }
+}
+```
+
+Then at the top of your PHP script require the autoloader:
+
+```bash
+require 'vendor/autoload.php';
+```
 
 ## Example ##
 The repository is provided with an example PHP file (`example.php`) in the root of this repository. 
