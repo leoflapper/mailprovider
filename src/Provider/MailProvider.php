@@ -109,7 +109,7 @@ abstract class MailProvider implements MailInterface
      * @param string $name optional name for the email address.
      * @return MailProvider
      */
-    public function addTo($email, $name = null)
+    public function addTo($email, $name = '')
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(
@@ -145,7 +145,7 @@ abstract class MailProvider implements MailInterface
      * @param string $email the name of the email address.
      * @return MailProvider
      */
-    public function setFrom($email, $name = null)
+    public function setFrom($email, $name = '')
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(
@@ -242,7 +242,7 @@ abstract class MailProvider implements MailInterface
      * @param string $name optional name for the email address.
      * @return MailProvider
      */
-    public function addCc($email, $name = null)
+    public function addCc($email, $name = '')
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(
@@ -298,7 +298,7 @@ abstract class MailProvider implements MailInterface
      * @param string $name optional name for the email address.
      * @return MailProvider
      */
-    public function addBcc($email, $name = null)
+    public function addBcc($email, $name = '')
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(

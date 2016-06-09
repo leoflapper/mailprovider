@@ -231,7 +231,7 @@ class Mailgun extends MailProvider
      * @param string $email the email address.
      * @param string $name  the name.
      */
-    private function setEmailNameString($email, $name = null)
+    private function setEmailNameString($email, $name = '')
     {
         if (!is_string($email)) {
             throw new \InvalidArgumentException(sprintf(
