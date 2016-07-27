@@ -10,7 +10,8 @@ namespace MailProvider\Provider;
  * the desired data.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.0.0
+ * @version 1.0.1
+ * @since 1.0.0
  */
 abstract class MailProvider implements MailInterface
 {
@@ -86,7 +87,7 @@ abstract class MailProvider implements MailInterface
      */
     public function send()
     {
-        $this->doSend();
+        return $this->doSend();
     }
     
     /**

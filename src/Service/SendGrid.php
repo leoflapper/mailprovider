@@ -3,16 +3,21 @@
 namespace MailProvider\Service;
 
 use SendGrid as SendGridLibrary;
-use SendGrid\Email as SendGridEmail;
+use SendGrid\Mail;
+use SendGrid\Email;
+use SendGrid\Personalization;
+use SendGrid\Content;
+use SendGrid\Attachment;
 use MailProvider\Provider\MailProvider;
 
 /**
  * SendGrid
  *
- * Sends an e-mail with the Mandrill API.
+ * Sends an e-mail with the SendGrid V3 API.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.0.0
+ * @version 1.0.1
+ * @since 1.0.0
  * @see https://github.com/sendgrid/sendgrid-php The SendGrid PHP library.
  */
 class SendGrid extends MailProvider
@@ -21,26 +26,32 @@ class SendGrid extends MailProvider
      * The SendGrid Library.
      * @var SendGridLibrary
      */
-    protected $client;
+    protected $SendGrid;
 
     /**
-     * Th SendGrid Email class.
-     * @var SendGridEmail.
+     * The SendGrid Email class.
+     * @var Mail.
      */
     protected $email;
 
     /**
-     * Sets the client with the provided API key.
-     * @param string $apiKey the client API key.
+     * The SendGrid Personalization class.
+     * @var Personalization.
+     */
+    protected $personalization;
+
+    /**
+     * Sets the SendGrid class with the provided API key.
+     * @param string $apiKey the SendGrid API key.
      */
     public function __construct($apiKey)
     {
-        $this->client = new SendGridLibrary($apiKey);
+       $this->SendGrid = new SendGridLibrary($apiKey);
     }
 
     /**
      * Retrieves the SendGrid Email class.
-     * @return SendGridEmail
+     * @return Mail
      */
     public function getEmail()
     {
@@ -50,6 +61,14 @@ class SendGrid extends MailProvider
         return $this->email;
     }
 
+    public function getPersonalization()
+    {
+        if(!$this->personalization){
+            $this->setNewPersonalization();
+        }
+        return $this->personalization;
+    }
+
     /**
      * Sends the email through the SendGrid API.
      * @return SendGrid response object.
@@ -57,26 +76,31 @@ class SendGrid extends MailProvider
     protected function doSend()
     {
         $response = null;
+        
+        $this->getEmail()->setSubject($this->getSubject());
 
-        $this->getEmail()
-            ->setSubject($this->getSubject())
-            ->setText($this->getText())
-            ->setHtml($this->getHtml())
-            ->setHeaders($this->getHeaders())
-            ->setFrom($this->getFrom())
-            ->setFromName($this->getFromName())
-            ->setReplyTo($this->getReplyTo())
-        ;
+        if($text = $this->getText()){
+            $this->getEmail()->addContent(new Content("text/plain", $text));
+        }
 
+        if($html = $this->getHtml()){
+            $this->getEmail()->addContent(new Content("text/html", $html));
+        }
+        
+        $this->getEmail()->setFrom(new Email($this->getFromName(), $this->getFrom()));
+        $this->getEmail()->setReplyTo($this->getReplyTo());
         $this->setToData();
         $this->setCcData();
         $this->setBccData();
         $this->setAttachmentData();
-
-        if($response = $this->client->send($this->getEmail())){
+        $this->setHeaders();
+        $this->getEmail()->addPersonalization($this->getPersonalization());
+        
+        if($response = $this->SendGrid->client->mail()->send()->post($this->getEmail())){
             $this->setNewEmail();
+            $this->setNewPersonalization();
         }
-
+        
         return $response;
     }
 
@@ -86,7 +110,8 @@ class SendGrid extends MailProvider
     private function setToData()
     {
         foreach($this->getTos() as $to){
-            $this->getEmail()->addTo($to['email'], $to['name']);
+            $email = new Email($to['name'], $to['email']);
+            $this->getPersonalization()->addTo($email);
         }  
     }
 
@@ -96,7 +121,8 @@ class SendGrid extends MailProvider
     private function setCcData()
     {
         foreach($this->getCcs() as $cc){
-            $this->getEmail()->addCc($cc['email'], $cc['name']);
+            $email = new Email($cc['name'], $cc['email']);
+            $this->getPersonalization()->addCc($email);
         }  
     }
 
@@ -106,7 +132,15 @@ class SendGrid extends MailProvider
     private function setBccData()
     {
         foreach($this->getBccs() as $bcc){
-            $this->getEmail()->addBcc($bcc['email'], $bcc['name']);
+            $email = new Email($bcc['name'], $bcc['email']);
+            $this->getPersonalization()->addBcc($email);
+        } 
+    }
+
+    private function setHeaders()
+    {
+        foreach($this->getHeaders() as $key => $value){
+            $this->getEmail()->addHeader($key, $value);
         } 
     }
 
@@ -115,17 +149,31 @@ class SendGrid extends MailProvider
      */
     private function setAttachmentData()
     {
-        foreach($this->getAttachments() as $attachment){
-            $this->getEmail()->addAttachment($attachment['file']->getRealPath(), $attachment['name'], $attachment['type']);
+        foreach($this->getAttachments() as $attachmentData){
+            $attachment = new Attachment();
+            $attachment->setContent(base64_encode(file_get_contents($attachmentData['file']->getRealPath())));
+            $attachment->setType($attachmentData['type']);
+            $attachment->setFilename($attachmentData['name']);
+            $attachment->setDisposition("attachment");
+            $this->getEmail()->addAttachment($attachment);
         }  
     }
 
     /**
-     * Sets a new SendGridEmail class.
+     * Sets a new Mail class.
      */
     public function setNewEmail()
     {
-        $this->email = new SendGridEmail(); 
+        $this->email = new Mail(); 
+    }
+
+    /**
+     * Sets a new Personalization class.
+     * @see https://sendgrid.com/docs/Classroom/Send/v3_Mail_Send/personalizations.html Explanation of Personalizations.
+     */
+    public function setNewPersonalization()
+    {
+        $this->personalization = new Personalization(); 
     }
 
 }

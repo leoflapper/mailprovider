@@ -11,7 +11,8 @@ use MailProvider\Provider\MailProvider;
  * Sends an e-mail with the Mandrill API.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.0.0
+ * @version 1.0.1
+ * @since 1.0.0
  * @see https://mandrillapp.com/api/docs/messages.php.html#method-send the Mandrill API documentation.
  */
 class Mandrill extends MailProvider
