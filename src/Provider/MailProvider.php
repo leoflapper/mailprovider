@@ -158,7 +158,7 @@ abstract class MailProvider implements MailInterface
 
         $this->from = $email;
 
-        if($name !== null){
+        if($name !== ''){
             $this->setFromName($name);
         }
 

@@ -2,23 +2,21 @@
 
     require 'vendor/autoload.php';
     
-    //$service = new MailProvider\Service\SendGrid('API-KEY');
-    //$service = new MailProvider\Service\Mailgun('API-KEY');
-    $service = new MailProvider\Service\Mandrill('API-KEY');
+    $service = new MailProvider\Service\SMTP('server', 25);
     $service
+        ->setProtocol('ssl')
+        ->setLogin('username', 'password')
         ->addTo('info@myemail.nl', 'Leo Flapper')
         ->addCc('cc@myemail.nl', 'Leo Flapper')
         ->addBcc('bcc@myemail.nl', 'Leo Flapper')
         ->setFrom('info@myhost.nl', 'Leo Flapper')
         ->setSubject('My Subject')
-        ->setText('My text')
         ->setHtml('<p>Beautiful content</p>')
         ->addAttachment('/myattachment.txt', 'Attachment.txt')
         ->addHeader('MyHeader', 'Value')
-        ->setReplyTo('reply@myemail.nl')
-    ;
+        ->setReplyTo('reply@myemail.nl');
 
     $response = $service->send();
-    echo '<pre>'; print_r($response); echo '</pre>'; die();
-    
+    echo '<pre>'; print_r($response); echo '</pre>'; 
+
 ?>
