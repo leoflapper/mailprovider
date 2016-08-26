@@ -1,18 +1,19 @@
 <?php
 
     require 'vendor/autoload.php';
-    
-    $service = new MailProvider\Service\SMTP('server', 25);
+
+    $service = new MailProvider\Service\PHPMailer();
     $service
-        ->setProtocol('ssl')
-        ->setLogin('username', 'password')
+        ->setProtocol('smtp')
+        ->setHost('localhost')
+        ->setPort(1025)
         ->addTo('info@myemail.nl', 'Leo Flapper')
         ->addCc('cc@myemail.nl', 'Leo Flapper')
         ->addBcc('bcc@myemail.nl', 'Leo Flapper')
         ->setFrom('info@myhost.nl', 'Leo Flapper')
         ->setSubject('My Subject')
-        ->setHtml('<p>Beautiful content</p>')
-        ->addAttachment('/myattachment.txt', 'Attachment.txt')
+        ->setHtml('Beautiful content')
+        ->addAttachment('LICENSE.md', 'Attachment.txt')
         ->addHeader('MyHeader', 'Value')
         ->setReplyTo('reply@myemail.nl');
 

@@ -23,7 +23,7 @@
         "mandrill/mandrill": "1.0.*",
         "sendgrid/sendgrid": "~5.0.7",
         "mailgun/mailgun-php": "~2.0",
-        "php-http/guzzle6-adapter": "^1.1"
+        "phpmailer/phpmailer": "~5.2"
     },
     "autoload": {
         "psr-4": {

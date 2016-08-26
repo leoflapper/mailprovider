@@ -20,67 +20,67 @@ abstract class MailProvider implements MailInterface
      * Contains all 'to' email addresses.
      * @var array
      */
-    private $to = [];
+    protected $to = [];
 
     /**
      * The from email address.
      * @var string
      */
-    private $from;
+    protected $from;
 
     /**
      * The from email address name
      * @var string
      */
-    private $fromName;
+    protected $fromName;
 
     /**
      * The reply to email address
      * @var string
      */
-    private $replyTo;
+    protected $replyTo;
 
     /**
      * Contains all 'cc' email addresses.
      * @var array
      */
-    private $cc = [];
+    protected $cc = [];
 
     /**
      * Contains all 'bcc' email addresses.
      * @var array
      */
-    private $bcc = [];
+    protected $bcc = [];
 
     /**
      * The subject of the email.
      * @var string
      */
-    private $subject;
+    protected $subject;
 
     /**
      * The text of the email.
      * @var string
      */
-    private $text;
+    protected $text;
 
     /**
      * The HTML of the email.
      * @var string
      */
-    private $html;
+    protected $html;
 
     /**
      * The email headers.
      * @var array
      */
-    private $headers = [];
+    protected $headers = [];
 
     /**
      * The email attachments.
      * @var array
      */
-    private $attachments = [];
+    protected $attachments = [];
 
     /**
      * {@inheritdoc }
