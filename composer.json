@@ -1,14 +1,15 @@
 {
     "name": "leoflapper/mailprovider",
     "type": "library",
-    "description": "Allows you to quickly send mails with different mail services like Mandrill, SendGrind and Mailgun",
+    "description": "Allows you to quickly send mails with different mail services like PHPMailer, Mandrill, SendGrind and Mailgun",
     "keywords": [
         "email",
         "provider",
         "mail",
         "mandrill",
         "sendgrid",
-        "mailgun"
+        "mailgun",
+        "php mailer"
     ],
     "homepage": "https://www.leoflapper.nl/",
     "license": "MIT",

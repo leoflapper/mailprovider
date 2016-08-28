@@ -16,7 +16,7 @@ use MailProvider\Provider\MailProvider;
  * Sends an e-mail with the SendGrid V3 API.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.0.2
+ * @version 1.1.0
  * @since 1.0.0
  * @see https://github.com/sendgrid/sendgrid-php The SendGrid PHP library.
  */
