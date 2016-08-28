@@ -60,7 +60,11 @@ class SendGrid extends MailProvider
         }
         return $this->email;
     }
-
+    
+    /**
+     * Returns the personalization class.
+     * @return Personalization the personalization class.
+     */
     public function getPersonalization()
     {
         if(!$this->personalization){
@@ -88,7 +92,7 @@ class SendGrid extends MailProvider
         }
         
         $this->getEmail()->setFrom(new Email($this->getFromName(), $this->getFrom()));
-        $this->getEmail()->setReplyTo($this->getReplyTo());
+        $this->getEmail()->setReplyTo(new Email('', $this->getReplyTo()));
         $this->setToData();
         $this->setCcData();
         $this->setBccData();
@@ -137,6 +141,9 @@ class SendGrid extends MailProvider
         } 
     }
 
+    /**
+     * Sets the email headers.
+     */
     private function setHeaders()
     {
         foreach($this->getHeaders() as $key => $value){

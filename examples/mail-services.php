@@ -1,6 +1,6 @@
 <?php
 
-    require 'vendor/autoload.php';
+    require '../vendor/autoload.php';
     
     //$service = new MailProvider\Service\SendGrid('API-KEY');
     //$service = new MailProvider\Service\Mailgun('API-KEY');
@@ -13,10 +13,9 @@
         ->setSubject('My Subject')
         ->setText('My text')
         ->setHtml('<p>Beautiful content</p>')
-        ->addAttachment('/myattachment.txt', 'Attachment.txt')
+        ->addAttachment('../LICENSE.md', 'Attachment.txt')
         ->addHeader('MyHeader', 'Value')
-        ->setReplyTo('reply@myemail.nl')
-    ;
+        ->setReplyTo('reply@myemail.nl');
 
     $response = $service->send();
     echo '<pre>'; print_r($response); echo '</pre>'; die();

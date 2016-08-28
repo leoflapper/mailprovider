@@ -19,7 +19,7 @@ class PHPMailer extends MailProvider
 {
     
     /**
-     * Contains the supported protocols by PHPMailer
+     * Contains the supported protocols by PHPMailer.
      * @var array
      */
     private $protocols = [
@@ -214,7 +214,6 @@ class PHPMailer extends MailProvider
         }
 
         $protocol = strtolower($protocol);
-
         if(!isset($this->protocols[$protocol])){
             throw new \Exception(
                 sprintf('Protocol %s does not exist; Existing protocols are %s', 
@@ -238,7 +237,6 @@ class PHPMailer extends MailProvider
         }
 
         return $this;
-
     }
 
     /**
@@ -269,7 +267,6 @@ class PHPMailer extends MailProvider
         $this->client->Password = $password;
 
         return $this;
-
     }
 
     /**
@@ -306,8 +303,7 @@ class PHPMailer extends MailProvider
             $this->client = clone $this->originalClient;
         } else {
             $this->client = new PHPMailerLibrary();
-        }     
-        
+        }   
     }
 
 }
