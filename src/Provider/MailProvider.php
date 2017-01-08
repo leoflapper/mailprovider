@@ -10,7 +10,7 @@ namespace MailProvider\Provider;
  * the desired data.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.0.0
  */
 abstract class MailProvider implements MailInterface
@@ -576,6 +576,137 @@ abstract class MailProvider implements MailInterface
         }
         //repack the indices
         $list = array_values($list);
+    }
+
+    /**
+     * Generates a multidimensional array containing the mail data.
+     *
+     * @return array $result - the multidimensional array containing the mail data
+     */
+    public function toArray()
+    {
+        $result = [
+            'from' => [
+                'email' => $this->getFrom(),
+                'name' => $this->getFromName()
+            ],
+            'replyTo' => [
+                'email' => $this->getReplyTo(),
+                'name' => ''
+            ],
+            'subject' => $this->getSubject(),
+            'text' => $this->getText(),
+            'html' => $this->getHtml()
+        ];
+
+        $tos = [];
+        foreach($this->getTos() as $to) {
+            $tos[] = [
+                'email' => $to['email'],
+                'name' => $to['name']
+            ];
+        }
+        $result['to'] = $tos;
+
+        $ccs = [];
+        foreach($this->getCcs() as $cc) {
+            $ccs[] = [
+                'email' => $cc['email'],
+                'name' => $cc['name']
+            ];
+        }
+        $result['cc'] = $ccs;
+
+        $bccs = [];
+        foreach($this->getBccs() as $bcc) {
+            $bccs[] = [
+                'email' => $bcc['email'],
+                'name' => $bcc['name']
+            ];
+        }
+        $result['bcc'] = $bccs;
+
+        $attachments = [];
+        foreach($this->getBccs() as $attachment) {
+            $attachments[] = [
+                'file' => $attachment['file'],
+                'name' => $attachment['name'],
+                'type' => $attachment['type']
+            ];
+        }
+        $result['attachments'] = $attachments;
+
+        $headers = [];
+        foreach($this->getHeaders() as $key => $value) {
+            $headers[$key] = $value;
+        }
+        $result['headers'] = $headers;
+
+        return $result;
+    }
+
+    /**
+     * Sets the values by a multidimensional array given
+     *
+     * @param array $array - multidimensional array containing the mail values
+     * @return void
+     */
+    public function fromArray(array $array)
+    {
+        if(isset($array['from']) && isset($array['from']['email'])) {
+            $this->setFrom($array['from']['email']);
+
+            if(isset($array['from']['name'])) {
+                $this->setFromName($array['from']['name']);
+            }
+        }
+
+        if(isset($array['to'])) {
+            foreach($array['to'] as $to) {
+                $this->addTo($to['email'], $to['name']);
+            }
+        }
+
+        if(isset($array['cc'])) {
+            foreach($array['cc'] as $cc) {
+                $this->addCc($cc['email'], $cc['name']);
+            }
+        }
+
+        if(isset($array['bcc'])) {
+            foreach($array['bcc'] as $bcc) {
+                $this->addBcc($bcc['email'], $bcc['name']);
+            }
+        }
+
+        if(isset($array['replyTo']) && isset($array['replyTo']['email'])) {
+            $this->setReplyTo($array['replyTo']['email']);
+        }
+
+        if(isset($array['subject'])) {
+            $this->setSubject($array['subject']);
+        }
+
+        if(isset($array['text'])) {
+            $this->setText($array['text']);
+        }
+
+        if(isset($array['html'])) {
+            $this->setHtml($array['html']);
+        }
+        
+        if(isset($array['attachments'])) {
+            foreach($array['attachments'] as $attachment) {
+                $this->addAttachment($attachment['file'], $attachment['name'], $attachment['type']);
+            }
+        }
+
+        if(isset($array['headers'])) {
+            foreach($array['headers'] as $key => $value) {
+                $this->addHeader($key, $value);
+            }
+        }
+        
     }
 
 }

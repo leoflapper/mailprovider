@@ -11,7 +11,7 @@ use MailProvider\Provider\MailProvider;
  * Sends an email with the PHPMailer class.
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.1.0
  * @see https://github.com/PHPMailer/PHPMailer
  */
@@ -70,6 +70,7 @@ class PHPMailer extends MailProvider
         }
 
         $response = false;
+        
         
         if($this->client->send()){
             $this->setClient(); 
@@ -147,7 +148,7 @@ class PHPMailer extends MailProvider
      */
     public function setText($text)
     {
-        if (!is_string($html)) {
+        if (!is_string($text)) {
             throw new \InvalidArgumentException(sprintf(
                 '%s: expects a string argument; received "%s"',
                 __METHOD__,

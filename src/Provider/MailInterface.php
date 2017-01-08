@@ -6,7 +6,7 @@ namespace MailProvider\Provider;
  * The Mail Interface
  *
  * @author Leo Flapper <info@leoflapper.nl>
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.0.0
  */
 interface MailInterface
