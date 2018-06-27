@@ -83,6 +83,30 @@ abstract class MailProvider implements MailInterface
     protected $attachments = [];
 
     /**
+     * Errors related to the mail client
+     *
+     * @var array
+     */
+    protected $errors = [];
+
+    /**
+     * The name of the service
+     * @var string
+     */
+    protected $name = 'MailService';
+
+
+    /**
+     * Returns the mail service name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * {@inheritdoc }
      */
     public function send()
@@ -576,6 +600,37 @@ abstract class MailProvider implements MailInterface
         }
         //repack the indices
         $list = array_values($list);
+    }
+
+    /**
+     * Returns the errors related to the mail client
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Sets the errors for the mail client
+     * @param array $errors
+     */
+    public function setErrors($errors)
+    {
+        foreach ($errors as $error) {
+            $this->addError($error);
+        }
+    }
+
+    /**
+     * Adds an error
+     *
+     * @param $error
+     */
+    public function addError($error)
+    {
+        $this->errors[] = $this->getName().': '.$error;
     }
 
     /**

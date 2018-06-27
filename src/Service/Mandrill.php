@@ -49,6 +49,12 @@ class Mandrill extends MailProvider
     private $sendAt;
 
     /**
+     * The name of the mail service
+     * @var string
+     */
+    protected $name = 'Mandrill';
+
+    /**
      * Sets the client with the provided API key.
      * @param string $apiKey the client API key.
      */

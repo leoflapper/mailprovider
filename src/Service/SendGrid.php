@@ -41,6 +41,12 @@ class SendGrid extends MailProvider
     protected $personalization;
 
     /**
+     * The name of the mail service
+     * @var string
+     */
+    protected $name = 'SendGrid';
+
+    /**
      * Sets the SendGrid class with the provided API key.
      * @param string $apiKey the SendGrid API key.
      */

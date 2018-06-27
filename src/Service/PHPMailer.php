@@ -39,6 +39,12 @@ class PHPMailer extends MailProvider
     protected $originalClient;
 
     /**
+     * The name of the mail service
+     * @var string
+     */
+    protected $name = 'PHPMailer';
+
+    /**
      * Sets the client by the PHPMailer class given or adds a new PHPMailer class.
      * @param PHPMailerLibrary|null $client the optional PHPMailer class.
      */
@@ -70,11 +76,15 @@ class PHPMailer extends MailProvider
         }
 
         $response = false;
-        
-        
+
         if($this->client->send()){
-            $this->setClient(); 
+            $this->setClient();
             $response = true;
+
+        } else {
+            if($this->getErrorInfo()) {
+                $this->addError($this->getErrorInfo());
+            }
         }
 
         return $response;  
@@ -195,6 +205,10 @@ class PHPMailer extends MailProvider
             ));
         }
 
+        if(587 === $port) {
+            $this->client->SMTPSecure = 'tls';
+        }
+
         $this->client->Port = $port;
 
         return $this;
@@ -271,6 +285,17 @@ class PHPMailer extends MailProvider
     }
 
     /**
+     * Returns a property by the key given
+     *
+     * @param $property
+     * @return mixed
+     */
+    public function getProperty($property)
+    {
+        return $this->client->$property;
+    }
+
+    /**
      * Sets a property in the PHPMailer class.
      * @param string $property the property name.
      * @param mixed $value    the property value.
@@ -286,6 +311,17 @@ class PHPMailer extends MailProvider
         }
 
         $this->client->$property = $value;
+    }
+
+
+    /**
+     * Returns the PHP Mailer errors
+     *
+     * @return string
+     */
+    public function getErrorInfo()
+    {
+        return $this->client->ErrorInfo;
     }
 
     /**
