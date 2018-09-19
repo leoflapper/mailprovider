@@ -98,14 +98,17 @@ class SendGrid extends MailProvider
         }
         
         $this->getEmail()->setFrom(new Email($this->getFromName(), $this->getFrom()));
-        $this->getEmail()->setReplyTo(new Email('', $this->getReplyTo()));
+        if($this->getReplyTo()) {
+            $this->getEmail()->setReplyTo(new Email('', $this->getReplyTo()));
+        }
+
         $this->setToData();
         $this->setCcData();
         $this->setBccData();
         $this->setAttachmentData();
         $this->setHeaders();
         $this->getEmail()->addPersonalization($this->getPersonalization());
-        
+
         if($response = $this->SendGrid->client->mail()->send()->post($this->getEmail())){
             $this->setNewEmail();
             $this->setNewPersonalization();
