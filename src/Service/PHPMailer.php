@@ -2,8 +2,8 @@
 
 namespace MailProvider\Service;
 
-use PHPMailer as PHPMailerLibrary;
 use MailProvider\Provider\MailProvider;
+use PHPMailer as PHPMailerLibrary;
 
 /**
  * PHPMailer
@@ -17,7 +17,18 @@ use MailProvider\Provider\MailProvider;
  */
 class PHPMailer extends MailProvider
 {
-    
+
+    /**
+     * Contains the original PHPMailer class.
+     * Used for resetting after the email has been send.
+     * @var PHPMailerLibrary
+     */
+    protected $originalClient;
+    /**
+     * The name of the mail service
+     * @var string
+     */
+    protected $name = 'PHPMailer';
     /**
      * Contains the supported protocols by PHPMailer.
      * @var array
@@ -32,19 +43,6 @@ class PHPMailer extends MailProvider
     ];
 
     /**
-     * Contains the original PHPMailer class. 
-     * Used for resetting after the email has been send.
-     * @var PHPMailerLibrary
-     */
-    protected $originalClient;
-
-    /**
-     * The name of the mail service
-     * @var string
-     */
-    protected $name = 'PHPMailer';
-
-    /**
      * Sets the client by the PHPMailer class given or adds a new PHPMailer class.
      * @param PHPMailerLibrary|null $client the optional PHPMailer class.
      */
@@ -54,84 +52,26 @@ class PHPMailer extends MailProvider
     }
 
     /**
-     * Sends the email with the PHPMailer class.
-     * @return boolean true if mail send, false if not.
+     * Sets the client by the PHPMailer class given or adds a new PHPMailer class.
+     * If an original client exists, this original client will be
+     * cloned to use as client.
+     * @param PHPMailerLibrary|null $client the optional PHPMailer class.
      */
-    protected function doSend()
+    public function setClient(PHPMailerLibrary $client = null)
     {
-        $this->client->setFrom($this->getFrom(), $this->getFromName());
-        $this->client->addReplyTo($this->getReplyTo());
-        
-        $this->setToData();
-        $this->setCcData();
-        $this->setBccData();
+        if ($client !== null) {
+            $this->originalClient = $client;
+        }
 
-        $this->setAttachmentData();
-
-        $this->client->Subject = $this->getSubject();
-        if($this->client->ContentType === 'text/html'){
-            $this->client->Body = $this->getHtml();
+        if ($this->originalClient) {
+            $this->client = clone $this->originalClient;
         } else {
-            $this->client->Body = $this->getText();
-        }
-
-        $response = false;
-
-        if($this->client->send()){
-            $this->setClient();
-            $response = true;
-
-        } else {
-            if($this->getErrorInfo()) {
-                $this->addError($this->getErrorInfo());
-            }
-        }
-
-        return $response;  
-    }
-
-    /**
-     * Sets the 'to' email addresses.
-     */
-    private function setToData()
-    {
-        foreach($this->getTos() as $to){
-            $this->client->addAddress($to['email'], $to['name']);
-        }  
-    }
-
-    /**
-     * Sets the 'cc' email addresses.
-     */
-    private function setCcData()
-    {
-        foreach($this->getCcs() as $cc){
-            $this->client->addCC($cc['email'], $cc['name']);
-        }  
-    }
-
-    /**
-     * Sets the 'bcc' email addresses.
-     */
-    private function setBccData()
-    {
-        foreach($this->getBccs() as $bcc){
-            $this->client->addBcc($bcc['email'], $bcc['name']);
-        }  
-    }
-
-    /**
-     * Sets the attachment data in the desired PHPMailer format.
-     */
-    private function setAttachmentData()
-    {
-        foreach($this->getAttachments() as $attachment){
-            $this->client->addAttachment($attachment['file']->getRealPath(), $attachment['name'], $encoding = 'base64', $attachment['type']); 
+            $this->client = new PHPMailerLibrary();
         }
     }
 
     /**
-     * {@inheritdoc}. Sets the content type in 
+     * {@inheritdoc}. Sets the content type in
      * the PHPMailer class to 'text/html'.
      * @param string $html the html string.
      */
@@ -145,14 +85,14 @@ class PHPMailer extends MailProvider
             ));
         }
 
-        $this->client->isHTML(true); 
+        $this->client->isHTML(true);
         $this->html = $html;
-        
+
         return $this;
     }
 
     /**
-     * {@inheritdoc}. Sets the content type in 
+     * {@inheritdoc}. Sets the content type in
      * the PHPMailer class to 'text/plain'.
      * @param [type] $text [description]
      */
@@ -166,9 +106,9 @@ class PHPMailer extends MailProvider
             ));
         }
 
-        $this->client->isHTML(false); 
+        $this->client->isHTML(false);
         $this->text = $text;
-        
+
         return $this;
     }
 
@@ -205,7 +145,7 @@ class PHPMailer extends MailProvider
             ));
         }
 
-        if(587 === $port) {
+        if (587 === $port) {
             $this->client->SMTPSecure = 'tls';
         }
 
@@ -229,24 +169,24 @@ class PHPMailer extends MailProvider
         }
 
         $protocol = strtolower($protocol);
-        if(!isset($this->protocols[$protocol])){
+        if (!isset($this->protocols[$protocol])) {
             throw new \Exception(
-                sprintf('Protocol %s does not exist; Existing protocols are %s', 
-                    $protocol, 
+                sprintf('Protocol %s does not exist; Existing protocols are %s',
+                    $protocol,
                     implode(', ', $this->protocols)
                 )
             );
         }
 
-        if($protocol === 'smtp'){
+        if ($protocol === 'smtp') {
             $this->client->isSMTP();
-        } elseif($protocol === 'mail'){
+        } elseif ($protocol === 'mail') {
             $this->client->isMail();
-        } elseif($protocol === 'sendmail'){
+        } elseif ($protocol === 'sendmail') {
             $this->client->isSendmail();
         }
 
-        if($protocol === 'ssl' || $protocol === 'tls'){
+        if ($protocol === 'ssl' || $protocol === 'tls') {
             $this->client->isSMTP();
             $this->client->SMTPSecure = $protocol;
         }
@@ -298,7 +238,7 @@ class PHPMailer extends MailProvider
     /**
      * Sets a property in the PHPMailer class.
      * @param string $property the property name.
-     * @param mixed $value    the property value.
+     * @param mixed $value the property value.
      */
     public function setProperty($property, $value)
     {
@@ -313,6 +253,124 @@ class PHPMailer extends MailProvider
         $this->client->$property = $value;
     }
 
+    public function addStringAttachment(
+        $string,
+        $filename,
+        $encoding = 'base64',
+        $type = '',
+        $disposition = 'attachment'
+    )
+    {
+        // If a MIME type is not specified, try to work it out from the file name
+        if ($type == '') {
+            $type = PHPMailerLibrary::filenameToType($filename);
+        }
+        // Append to $attachment array
+        $this->attachments[] = array(
+            0 => $string,
+            1 => $filename,
+            2 => basename($filename),
+            3 => $encoding,
+            4 => $type,
+            5 => true, // isStringAttachment
+            6 => $disposition,
+            7 => 0
+        );
+    }
+
+    /**
+     * Sends the email with the PHPMailer class.
+     * @return boolean true if mail send, false if not.
+     */
+    protected function doSend()
+    {
+        $this->client->setFrom($this->getFrom(), $this->getFromName());
+        $this->client->addReplyTo($this->getReplyTo());
+
+        $this->setToData();
+        $this->setCcData();
+        $this->setBccData();
+
+        $this->setAttachmentData();
+
+        $this->client->Subject = $this->getSubject();
+        if ($this->client->ContentType === 'text/html') {
+            $this->client->Body = $this->getHtml();
+        } else {
+            $this->client->Body = $this->getText();
+        }
+
+        $response = false;
+
+        if ($this->client->send()) {
+            $this->setClient();
+            $response = true;
+
+        } else {
+            if ($this->getErrorInfo()) {
+                $this->addError($this->getErrorInfo());
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * Sets the 'to' email addresses.
+     */
+    private function setToData()
+    {
+        foreach ($this->getTos() as $to) {
+            $this->client->addAddress($to['email'], $to['name']);
+        }
+    }
+
+    /**
+     * Sets the 'cc' email addresses.
+     */
+    private function setCcData()
+    {
+        foreach ($this->getCcs() as $cc) {
+            $this->client->addCC($cc['email'], $cc['name']);
+        }
+    }
+
+    /**
+     * Sets the 'bcc' email addresses.
+     */
+    private function setBccData()
+    {
+        foreach ($this->getBccs() as $bcc) {
+            $this->client->addBcc($bcc['email'], $bcc['name']);
+        }
+    }
+
+    /**
+     * Sets the attachment data in the desired PHPMailer format.
+     */
+    private function setAttachmentData()
+    {
+        foreach ($this->getAttachments() as $attachment) {
+            if (isset($attachment['file'])) {
+                $this->client->addAttachment(
+                    $attachment['file']->getRealPath(),
+                    $attachment['name'],
+                    $encoding = 'base64',
+                    $attachment['type']
+                );
+            }
+
+            if (isset($attachment[0])) {
+                $this->client->addStringAttachment(
+                    $attachment[0],
+                    $attachment[1],
+                    $attachment[3],
+                    $attachment[4],
+                    $attachment[6]
+                );
+            }
+        }
+    }
 
     /**
      * Returns the PHP Mailer errors
@@ -323,24 +381,4 @@ class PHPMailer extends MailProvider
     {
         return $this->client->ErrorInfo;
     }
-
-    /**
-     * Sets the client by the PHPMailer class given or adds a new PHPMailer class.
-     * If an original client exists, this original client will be
-     * cloned to use as client.
-     * @param PHPMailerLibrary|null $client the optional PHPMailer class.
-     */
-    public function setClient(PHPMailerLibrary $client = null)
-    {
-        if($client !== null){
-            $this->originalClient =  $client;
-        }
-
-        if($this->originalClient){
-            $this->client = clone $this->originalClient;
-        } else {
-            $this->client = new PHPMailerLibrary();
-        }   
-    }
-
 }
