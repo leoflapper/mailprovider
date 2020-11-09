@@ -682,7 +682,7 @@ abstract class MailProvider implements MailInterface
         $result['bcc'] = $bccs;
 
         $attachments = [];
-        foreach($this->getBccs() as $attachment) {
+        foreach($this->getAttachments() as $attachment) {
             $attachments[] = [
                 'file' => $attachment['file'],
                 'name' => $attachment['name'],
