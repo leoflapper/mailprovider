@@ -62,3 +62,12 @@ require 'vendor/autoload.php';
 
 ## Example ##
 There are different examples located inside the examples directory.
+
+## Credits
+
+- [Leo Flapper](https://github.com/leoflapper)
+- [Nathan Jansen](https://github.com/nathanjansen)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
